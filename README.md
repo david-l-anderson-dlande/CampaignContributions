@@ -7,6 +7,8 @@ My solution(s) to the Insight Data Engineering February 2018 coding challenge.
 
 To be filled out when I'm "done" writing it.
 
+Written in Python 3.5.2
+
 
 
 # Development history
