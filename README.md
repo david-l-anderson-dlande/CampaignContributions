@@ -38,13 +38,13 @@ Things to test:
         * `TRANSACTION_AMT` is empty
         (I will want to skip these as a first step, for later performance reasons)
 *Correctly identify repeat donors
-*correctly calculate total amount donated by donor
-*correctly calculate number of donations from zip code from repeat donors
-*Correctly calculate nearest-rank percentile
+*Correctly calculate total amount donated to recipient from zip in current year from repeat donors
+*Correctly calculate number of donations to recipient from zip in current year from repeat donors
+*Correctly calculate nearest-rank percentile of donations to recipient from zip in current year from repeat donors
         *(Will need to be redone for each new record from a repeat donor, so performance may be an issue)
-*Correctly round in percentile calculation.
+*Correctly round in percentile calculation; i.e. donation amounts
 *Correctly create `repeat_donors.txt`
-        *Correctly fill with `CMTE_ID|ZIP_CODE(5digits)|YYYY|percentile|total_amt_this_donor|number_donations
+        *Correctly fill with `CMTE_ID`|`ZIP_CODE`(5digits)|YYYY|percentile|total_amt_this_recipient_fromthisZipCodeandYear|number_donations_this_recipient_fromthisZipCodeandYear
 
 
 Once that's working, deal with scaling; keeping track of data for repeat donors and running calculations looks like where scaling is going to be an issue.
@@ -54,10 +54,20 @@ Don't worry about directory structure until the very end.
 After a couple of quick and dirty tests:
 *Mashing a bunch of booleans (for skipping entry) will work
 *Nearest-rank percentile with the floor division right in an ordered array of donations will work
+*.split() will work fine for dealing with each line of data
+*Simply turning a short file into a list (for testing) will work
 
+Adding new values to the list of donated values will probably be most efficiently done by finding and inserting, not adding and sorting, though I should test.
 
+I lied about the directory structure; already in place.
 
+First pass at data structure will be a dictionary with keys of `CMTE_ID|ZIP_CODE(5digits)|YYYY`, and values of sorted tuples of rounded donation values.
+Use bisect.insort to add to appropriate lists.
 
+Use dictionary with keys of `ZIP_CODE|NAME` and values of date to store whether we have repeat donors or not. If date is greater than stored one, we have a repeat donor. If less, replace date.
 
+Don't test very basic things like whether or not input files exist. Python already raises errors for those.
+
+Need to remember definition of 100th percentile; also, acceptable values are 
 
 
