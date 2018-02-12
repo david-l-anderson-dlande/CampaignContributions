@@ -28,6 +28,7 @@ For a repeat donor, calculate total contribution, number of contributions, and c
 
 Things to test:
 *Check that `percentile.txt` exists, and contains an integer between 0 and 100. (And nothing else?)
+*Correctly read in file
 *Correctly skip entries where:
         * `OTHER_ID` is not empty
         * `TRANSACTION_DT` is  empty or malformed (should be MMDDYYYY)
@@ -35,10 +36,10 @@ Things to test:
         * `NAME` is empty or malformed (Just check for empty, as making assumptions about names is...bad)
         * `CMTE_ID` is empty or malformed
         * `TRANSACTION_AMT` is empty
-*I will want to skip these as a first step, for later performance reasons
+        (I will want to skip these as a first step, for later performance reasons)
 *Correctly identify repeat donors
 *correctly calculate total amount donated by donor
-*correctly calculate number of donations
+*correctly calculate number of donations from zip code from repeat donors
 *Correctly calculate nearest-rank percentile
         *(Will need to be redone for each new record from a repeat donor, so performance may be an issue)
 *Correctly round in percentile calculation.
@@ -49,6 +50,10 @@ Things to test:
 Once that's working, deal with scaling; keeping track of data for repeat donors and running calculations looks like where scaling is going to be an issue.
 
 Don't worry about directory structure until the very end.
+
+After a couple of quick and dirty tests:
+*Mashing a bunch of booleans (for skipping entry) will work
+*Nearest-rank percentile with the floor division right in an ordered array of donations will work
 
 
 
