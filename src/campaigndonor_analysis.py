@@ -1,4 +1,5 @@
 # campaigndonor_analysis.py
+# I apologize for not building this as a class; future work.
 
 import os
 import bisect
@@ -113,7 +114,8 @@ def emptyotherid(otheridstring):
         otherisempty = False
     return otherisempty
 
-
+# Yeah, there's a lot of these stupid things,
+# but they're all just that teensy different. Future improvement.
 
 
 

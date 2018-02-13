@@ -216,18 +216,5 @@ class ContributionCalculations(unittest.TestCase):
 
 
 
-
-    
-
-class Output(unittest.TestCase):
-
-    def test_writeline(self):
-        """writeline should write the correct thing in a file"""
-        self.assertEqual('CMTE_ID|ZIP_CODE(5digits)|YYYY', readline(writeline('CMTE_ID|ZIP_CODE(5digits)|YYYY')))
-
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
