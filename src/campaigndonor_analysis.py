@@ -35,11 +35,11 @@ def cdanalysis(infolder = 'input', outfolder = 'output',\
 
                         ident_string = line.split('|')[withinlinedict['CMTE_ID']]+'|'+line.split('|')[withinlinedict['ZIP_CODE']]+'|'+line.split('|')[withinlinedict['TRANSACTION_DT']][4:]
                         amount = float(line.split('|')[withinlinedict['TRANSACTION_AMT']])
-                        newcontribution(ident_string, value, contribution_dict)
+                        newcontribution(ident_string, amount, contribution_dict)
                         
                         percen = str(percentile(percent_interest, contribution_dict[ident_string]))
                         amt = str(amountdonated(contribution_dict[ident_string]))
-                        num = str(donatiocount(contribution_dict[ident_string]))
+                        num = str(donationcount(contribution_dict[ident_string]))
                         rd.write(ident_string+'|'+percen+'|'+amt+'|'+num+'\n')
 
                     else:
@@ -134,7 +134,7 @@ def percentile(percentile_value, donationlist):
     if percentile_value == 100:
         returnpercentile = donationlist[-1]
     else:
-        returnpercentile = donationlist[percentile_value*len(donationlist)//100]
+        returnpercentile = donationlist[round(percentile_value*len(donationlist)//100)]
     return round(returnpercentile)
 
 #def readline(filename):

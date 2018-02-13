@@ -11,6 +11,8 @@ Written in Python 3.5.2 on Ubuntu 16.04
 
 If you want to run the unit tests, run `run_unittests.sh` in `CampaignContributions/insight_testsuite/tests/unittests`.
 
+Otherwise, just hit `bash run.sh` in the topmost directory, and it will do what it should.
+
 
 
 # Development history
@@ -82,6 +84,6 @@ Definitely don't worry about testing reading in from a file (too trivial).
 
 Weird; there is one raise exception test which is raising an exception, but not passing.
 
-
+Heh. It works.
 
 
