@@ -5,9 +5,7 @@ My solution(s) to the Insight Data Engineering February 2018 coding challenge.
 
 # How to operate this
 
-To be filled out when I'm "done" writing it.
-
-Written in Python 3.5.2 on Ubuntu 16.04
+Written in Python 3.5.2 on Ubuntu 16.04, requires nothing that doesn't come with Python by default on that system.
 
 If you want to run the unit tests, run `run_unittests.sh` in `CampaignContributions/insight_testsuite/tests/unittests`.
 
@@ -85,5 +83,7 @@ Definitely don't worry about testing reading in from a file (too trivial).
 Weird; there is one raise exception test which is raising an exception, but not passing.
 
 Heh. It works.
+
+A bit of cleanup to make the Insight test happy and a couple of other minor things.
 
 

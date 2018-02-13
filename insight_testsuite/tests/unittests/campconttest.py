@@ -12,7 +12,7 @@ class Input(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.f_read = open('input/test_itcont.txt')
-        cls.percentinput = glob.glob('input/percentile*')
+        cls.percentinput = glob.glob('input/percentile_*')
         cls.percentinput.sort()
 
     @classmethod
@@ -187,7 +187,7 @@ class ContributionCalculations(unittest.TestCase):
     def test_amountdonated(self):
         """amountdonated should correctly calculate the total amount donated,
            including rounding"""
-        self.assertEqual(970.3, amountdonated(self.donation_test_list))
+        self.assertEqual(970, amountdonated(self.donation_test_list))
 
     def test_donationcount(self):
         """donationcount should correctly calculate the number of donations"""

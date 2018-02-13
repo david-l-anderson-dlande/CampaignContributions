@@ -13,8 +13,6 @@ withinlinedict = {'CMTE_ID':0,
 'TRANSACTION_AMT':14,
 'OTHER_ID':15}
 
-donor_dict = {}
-contribution_dict = {}
 
 
 
@@ -23,17 +21,19 @@ def cdanalysis(infolder = 'input', outfolder = 'output',\
                percentfile = 'percentile.txt'):
 
     percent_interest = percentileread(os.path.join(infolder, percentfile))
+    donor_dict = {}
+    contribution_dict = {}
 
     with open(os.path.join(outfolder, dataoutfile), 'w') as rd:
         with open(os.path.join(infolder, datainfile), 'r') as f:
             for line in f:
                 if is_valid(line):
 
-                    donor_string = line.split('|')[withinlinedict['ZIP_CODE']]+'|'+line.split('|')[withinlinedict['NAME']]
+                    donor_string = line.split('|')[withinlinedict['ZIP_CODE']][:5]+'|'+line.split('|')[withinlinedict['NAME']]
                     current_date = datetime.strptime(line.split('|')[withinlinedict['TRANSACTION_DT']], '%m%d%Y')
                     if repeatdonor(donor_string, current_date, donor_dict):
 
-                        ident_string = line.split('|')[withinlinedict['CMTE_ID']]+'|'+line.split('|')[withinlinedict['ZIP_CODE']]+'|'+line.split('|')[withinlinedict['TRANSACTION_DT']][4:]
+                        ident_string = line.split('|')[withinlinedict['CMTE_ID']]+'|'+line.split('|')[withinlinedict['ZIP_CODE']][:5]+'|'+line.split('|')[withinlinedict['TRANSACTION_DT']][4:]
                         amount = float(line.split('|')[withinlinedict['TRANSACTION_AMT']])
                         newcontribution(ident_string, amount, contribution_dict)
                         
@@ -125,7 +125,7 @@ def repeatdonor(identifierstring, date, donordictionary):
     return donorisrepeat
 
 def amountdonated(donationlist):
-    return sum(donationlist)
+    return round(sum(donationlist))
 
 def donationcount(donationlist):
     return len(donationlist)
@@ -137,8 +137,6 @@ def percentile(percentile_value, donationlist):
         returnpercentile = donationlist[round(percentile_value*len(donationlist)//100)]
     return round(returnpercentile)
 
-#def readline(filename):
-#    return str(list(filename)[0])
 
 
 def adddonor(identifierstring, date, donor_dict):
@@ -158,8 +156,6 @@ def newcontribution(identifierstring, value, contribution_dict):
     return contribution_dict
 
 
-
-print('derp')
 
 if __name__ == '__main__':
     cdanalysis()
