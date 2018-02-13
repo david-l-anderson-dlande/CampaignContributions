@@ -20,14 +20,6 @@ class Input(unittest.TestCase):
         cls.f_read.close()
 
 
-
-
-#    def test_readline(self):
-#        """readline should read the given line in a file"""
-#        self.assertEqual(readline(self.f_read), 'C00629618|N|TER|P|201701230300133512|15C|IND|PEREZ, JOHN A|LOS ANGELES|CA|90017|PRINCIPAL|DOUBLE NICKEL ADVISORS|01032017|40|H6CA34245|SA01251735122|1141239|||2012520171368850783') 
-
-
-
     def test_percentilereadlow(self):
         """percentileread should only accept values >0"""
         self.assertRaises(ValueError, percentileread, self.percentinput[5])
@@ -195,7 +187,7 @@ class ContributionCalculations(unittest.TestCase):
     def test_amountdonated(self):
         """amountdonated should correctly calculate the total amount donated,
            including rounding"""
-        self.assertEqual(970, amountdonated(self.donation_test_list))
+        self.assertEqual(970.3, amountdonated(self.donation_test_list))
 
     def test_donationcount(self):
         """donationcount should correctly calculate the number of donations"""

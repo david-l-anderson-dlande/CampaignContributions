@@ -22,13 +22,28 @@ def cdanalysis(infolder = 'input', outfolder = 'output',\
                datainfile = 'itcont.txt', dataoutfile = 'repeat_donors.txt',\
                percentfile = 'percentile.txt'):
 
-    percentile = percentileread(os.path.join(infolder, percentfile))
+    percent_interest = percentileread(os.path.join(infolder, percentfile))
 
     with open(os.path.join(outfolder, dataoutfile), 'w') as rd:
         with open(os.path.join(infolder, datainfile), 'r') as f:
             for line in f:
                 if is_valid(line):
-                    
+
+                    donor_string = line.split('|')[withinlinedict['ZIP_CODE']]+'|'+line.split('|')[withinlinedict['NAME']]
+                    current_date = datetime.strptime(line.split('|')[withinlinedict['TRANSACTION_DT']], '%m%d%Y')
+                    if repeatdonor(donor_string, current_date, donor_dict):
+
+                        ident_string = line.split('|')[withinlinedict['CMTE_ID']]+'|'+line.split('|')[withinlinedict['ZIP_CODE']]+'|'+line.split('|')[withinlinedict['TRANSACTION_DT']][4:]
+                        amount = float(line.split('|')[withinlinedict['TRANSACTION_AMT']])
+                        newcontribution(ident_string, value, contribution_dict)
+                        
+                        percen = str(percentile(percent_interest, contribution_dict[ident_string]))
+                        amt = str(amountdonated(contribution_dict[ident_string]))
+                        num = str(donatiocount(contribution_dict[ident_string]))
+                        rd.write(ident_string+'|'+percen+'|'+amt+'|'+num+'\n')
+
+                    else:
+                        adddonor(donor_string, current_date, donor_dict)
 
 
 
@@ -103,14 +118,14 @@ def emptyotherid(otheridstring):
 
 
 
-def repeatdonor(indentifierstring, date, donordictionary):
+def repeatdonor(identifierstring, date, donordictionary):
     donorisrepeat = False
-    if indentifierstring in donordictionary and donordictionary[indentifierstring]<=date:
+    if identifierstring in donordictionary and donordictionary[identifierstring]<=date:
         donorisrepeat = True
     return donorisrepeat
 
 def amountdonated(donationlist):
-    return round(sum(donationlist))
+    return sum(donationlist)
 
 def donationcount(donationlist):
     return len(donationlist)
@@ -120,10 +135,10 @@ def percentile(percentile_value, donationlist):
         returnpercentile = donationlist[-1]
     else:
         returnpercentile = donationlist[percentile_value*len(donationlist)//100]
-    return returnpercentile
+    return round(returnpercentile)
 
-def readline(filename):
-    return str(list(filename)[0])
+#def readline(filename):
+#    return str(list(filename)[0])
 
 
 def adddonor(identifierstring, date, donor_dict):
@@ -133,7 +148,7 @@ def adddonor(identifierstring, date, donor_dict):
     return donor_dict
 
 
-def newcontribution(identifierstring, value, contribution_dict): #use as example to ask Eli
+def newcontribution(identifierstring, value, contribution_dict):
     if identifierstring in contribution_dict:
         templist = contribution_dict[identifierstring]
         bisect.insort(templist, value)
