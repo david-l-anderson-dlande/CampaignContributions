@@ -32,6 +32,7 @@ Things to test:
 * Check that `percentile.txt` exists, and contains an integer between 0 and 100. (And nothing else?)
 * Correctly read in file
 * Correctly skip entries where:
+
         * `OTHER_ID` is not empty
         * `TRANSACTION_DT` is  empty or malformed (should be MMDDYYYY)
         * `ZIP_CODE` is empty or fewer than 5 digits
@@ -39,6 +40,7 @@ Things to test:
         * `CMTE_ID` is empty or malformed
         * `TRANSACTION_AMT` is empty
         (I will want to skip these as a first step, for later performance reasons)
+
 * Correctly identify repeat donors
 * Correctly calculate total amount donated to recipient from zip in current year from repeat donors
 * Correctly calculate number of donations to recipient from zip in current year from repeat donors
