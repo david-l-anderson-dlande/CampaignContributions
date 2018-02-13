@@ -1,0 +1,9 @@
+#.gitignore
+
+/**/__pycache__ 
+
+input_large/
+
+datetesting.py
+
+fuctionstesting.py
