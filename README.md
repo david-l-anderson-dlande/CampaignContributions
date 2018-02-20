@@ -88,4 +88,19 @@ Heh. It works.
 
 A bit of cleanup to make the Insight test happy and a couple of other minor things.
 
+Submitted; but as is the nature of software, never "done".
+
+Next steps:
+
+* Refactor a couple of loops for clarity
+* add sys.arg features
+* turn into a class
+* look into further performance improvements (testing indicates little RAM use, but over a minute with ~4GB input;
+     trade in using more RAM for time?)
+* refactor validation functions
+* Also clean up function and variable names, using underscores.
+* Oh, and split the line once, instead of many times.
+* look up `with ,` syntax
+
+
 
