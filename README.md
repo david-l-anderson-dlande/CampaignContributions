@@ -109,4 +109,5 @@ which means my Next steps are:
 * look into further performance improvements (testing indicates little RAM use, but over a minute with ~4GB input;
      trade in using more RAM for time?)
 
+Also, just discovered that `git add --all` had missed a couple things.
 
