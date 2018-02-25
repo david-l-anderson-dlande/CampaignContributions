@@ -25,17 +25,22 @@ def cdanalysis(folder_in = 'input', folder_out = 'output',\
     donor_dict = {}
     contribution_dict = {}
 
-    with open(os.path.join(folder_out, data_output_file), 'w') as rd:
-        with open(os.path.join(folder_in, data_input_file), 'r') as f: #check this for , syntax
-            for line in f:
-                if is_valid(line):
+    with open(os.path.join(folder_out, data_output_file), 'w') as rd, \
+         open(os.path.join(folder_in, data_input_file), 'r') as f:
 
-                    donor_string = line.split('|')[withinlinedict['ZIP_CODE']][:5]+'|'+line.split('|')[withinlinedict['NAME']]
-                    current_date = datetime.strptime(line.split('|')[withinlinedict['TRANSACTION_DT']], '%m%d%Y')
+            for line in f:
+                split_line = line.split('|')
+                if is_valid_line(split_line):
+
+                    donor_string = split_line[withinlinedict['ZIP_CODE']][:5]+\
+                        '|'+split_line[withinlinedict['NAME']]
+                    current_date = datetime.strptime(split_line[withinlinedict['TRANSACTION_DT']], '%m%d%Y')
                     if repeat_donor(donor_string, current_date, donor_dict):
 
-                        ident_string = line.split('|')[withinlinedict['CMTE_ID']]+'|'+line.split('|')[withinlinedict['ZIP_CODE']][:5]+'|'+line.split('|')[withinlinedict['TRANSACTION_DT']][4:]
-                        amount = float(line.split('|')[withinlinedict['TRANSACTION_AMT']])
+                        ident_string = split_line[withinlinedict['CMTE_ID']]+\
+                            '|'+split_line[withinlinedict['ZIP_CODE']][:5]+\
+                            '|'+split_line[withinlinedict['TRANSACTION_DT']][4:]
+                        amount = float(split_line[withinlinedict['TRANSACTION_AMT']])
                         new_contribution(ident_string, amount, contribution_dict)
                         
                         percen = str(percentile(percentile_of_interest, contribution_dict[ident_string]))
@@ -51,25 +56,12 @@ def cdanalysis(folder_in = 'input', folder_out = 'output',\
 
 
 
-def percentile_read(percentile_filename):
-    percent = list(open(percentile_filename))[0]
-    float(percent)
-    if not (0 < float(percent) <= 100):
-        raise ValueError("percentile out of range (must be 0 < percentile <= 100)")
-    return float(percent)
 
-
-
-
-
-def is_valid(inputstring):
-    vcid = is_valid_cmteid(inputstring.split('|')[withinlinedict['CMTE_ID']])
-    vname = is_name_exist(inputstring.split('|')[withinlinedict['NAME']])
-    vzip = is_valid_zipcode(inputstring.split('|')[withinlinedict['ZIP_CODE']])
-    vdate = is_valid_date(inputstring.split('|')[withinlinedict['TRANSACTION_DT']])
-    vtran = is_valid_transaction(inputstring.split('|')[withinlinedict['TRANSACTION_AMT']])
-    vother = is_valid_otherid(inputstring.split('|')[withinlinedict['OTHER_ID']])
-    return vcid and vname and vzip and vdate and vtran and vother
+def is_valid_line(input_line):
+    is_valid = True
+    for key in line_test_dict:
+        is_valid = is_valid and line_test_dict[key](input_line[withinlinedict[key]])
+    return is_valid
 
 
 def is_valid_cmteid(cmtestring):
@@ -114,8 +106,23 @@ def is_valid_otherid(otheridstring):
         otherisempty = False
     return otherisempty
 
-# Yeah, there's a lot of these stupid things,
-# but they're all just that teensy different. Future improvement.
+line_test_dict = {'CMTE_ID':is_valid_cmteid,
+                  'NAME':is_name_exist,
+                  'ZIP_CODE':is_valid_zipcode,
+                  'TRANSACTION_DT':is_valid_date,
+                  'TRANSACTION_AMT':is_valid_transaction,
+                  'OTHER_ID':is_valid_otherid}
+
+
+def percentile_read(percentile_filename):
+    percent = list(open(percentile_filename))[0]
+    float(percent)
+    if not (0 < float(percent) <= 100):
+        raise ValueError("percentile out of range (must be 0 < percentile <= 100)")
+    return float(percent)
+
+
+
 
 
 

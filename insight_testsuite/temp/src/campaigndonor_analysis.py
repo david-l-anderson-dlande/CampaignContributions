@@ -25,17 +25,22 @@ def cdanalysis(folder_in = 'input', folder_out = 'output',\
     donor_dict = {}
     contribution_dict = {}
 
-    with open(os.path.join(folder_out, data_output_file), 'w') as rd:
-        with open(os.path.join(folder_in, data_input_file), 'r') as f: #check this for , syntax
-            for line in f:
-                if is_valid(line):
+    with open(os.path.join(folder_out, data_output_file), 'w') as rd, \
+         open(os.path.join(folder_in, data_input_file), 'r') as f:
 
-                    donor_string = line.split('|')[withinlinedict['ZIP_CODE']][:5]+'|'+line.split('|')[withinlinedict['NAME']]
-                    current_date = datetime.strptime(line.split('|')[withinlinedict['TRANSACTION_DT']], '%m%d%Y')
+            for line in f:
+                split_line = line.split('|')
+                if is_valid_line(split_line):
+
+                    donor_string = split_line[withinlinedict['ZIP_CODE']][:5]+\
+                        '|'+split_line[withinlinedict['NAME']]
+                    current_date = datetime.strptime(split_line[withinlinedict['TRANSACTION_DT']], '%m%d%Y')
                     if repeat_donor(donor_string, current_date, donor_dict):
 
-                        ident_string = line.split('|')[withinlinedict['CMTE_ID']]+'|'+line.split('|')[withinlinedict['ZIP_CODE']][:5]+'|'+line.split('|')[withinlinedict['TRANSACTION_DT']][4:]
-                        amount = float(line.split('|')[withinlinedict['TRANSACTION_AMT']])
+                        ident_string = split_line[withinlinedict['CMTE_ID']]+\
+                            '|'+split_line[withinlinedict['ZIP_CODE']][:5]+\
+                            '|'+split_line[withinlinedict['TRANSACTION_DT']][4:]
+                        amount = float(split_line[withinlinedict['TRANSACTION_AMT']])
                         new_contribution(ident_string, amount, contribution_dict)
                         
                         percen = str(percentile(percentile_of_interest, contribution_dict[ident_string]))
@@ -62,35 +67,32 @@ def percentile_read(percentile_filename):
 
 
 
-def is_valid(inputstring):
-    vcid = validcmteid(inputstring.split('|')[withinlinedict['CMTE_ID']])
-    vname = nameexists(inputstring.split('|')[withinlinedict['NAME']])
-    vzip = validzipcode(inputstring.split('|')[withinlinedict['ZIP_CODE']])
-    vdate = validdate(inputstring.split('|')[withinlinedict['TRANSACTION_DT']])
-    vtran = validtransaction(inputstring.split('|')[withinlinedict['TRANSACTION_AMT']])
-    vother = emptyotherid(inputstring.split('|')[withinlinedict['OTHER_ID']])
-    return vcid and vname and vzip and vdate and vtran and vother
+def is_valid_line(input_line):
+    is_valid = True
+    for key in line_test_dict:
+        is_valid = is_valid and line_test_dict[key](input_line[withinlinedict[key]])
+    return is_valid
 
 
-def validcmteid(cmtestring):
+def is_valid_cmteid(cmtestring):
     cmteisvalid=True
     if len(cmtestring) != 9:
         cmteisvalid = False
     return cmteisvalid
 
-def nameexists(namestring):
+def is_name_exist(namestring):
     nameisempty=True
     if len(namestring) == 0:
         nameisempty = False
     return nameisempty
 
-def validzipcode(zipstring):
+def is_valid_zipcode(zipstring):
     zipcodeisvalid=True
     if len(zipstring) < 5:
         zipcodeisvalid = False
     return zipcodeisvalid
 
-def validdate(datestring):
+def is_valid_date(datestring):
     dateisvalid=True
     if len(datestring) != 8:
         dateisvalid = False
@@ -99,7 +101,7 @@ def validdate(datestring):
         dateisvalid = False
     return dateisvalid
 
-def validtransaction(amtstring):
+def is_valid_transaction(amtstring):
     amtisvalid=True
     if len(amtstring) == 0:
         amtisvalid = False
@@ -108,14 +110,18 @@ def validtransaction(amtstring):
         amtisvalid = False
     return amtisvalid
 
-def emptyotherid(otheridstring):
+def is_valid_otherid(otheridstring):
     otherisempty=True
     if len(otheridstring) > 0:
         otherisempty = False
     return otherisempty
 
-# Yeah, there's a lot of these stupid things,
-# but they're all just that teensy different. Future improvement.
+line_test_dict = {'CMTE_ID':is_valid_cmteid,
+                  'NAME':is_name_exist,
+                  'ZIP_CODE':is_valid_zipcode,
+                  'TRANSACTION_DT':is_valid_date,
+                  'TRANSACTION_AMT':is_valid_transaction,
+                  'OTHER_ID':is_valid_otherid}
 
 
 

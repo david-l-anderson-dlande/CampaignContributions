@@ -90,17 +90,23 @@ A bit of cleanup to make the Insight test happy and a couple of other minor thin
 
 Submitted; but as is the nature of software, never "done".
 
-Next steps:
+
+
+Interesting; when using a dictionary to loop over the line test suite, need to define the dictionary after the functions it contains.
+
+I have now completed 
+
+* refactor validation functions
+* Also clean up function and variable names, using underscores.
+* Oh, and split the line once, instead of many times.
+* look up `with ,` syntax
+
+which means my Next steps are:
 
 * Refactor a couple of loops for clarity
 * add sys.arg features
 * turn into a class
 * look into further performance improvements (testing indicates little RAM use, but over a minute with ~4GB input;
      trade in using more RAM for time?)
-* refactor validation functions
-* Also clean up function and variable names, using underscores.
-* Oh, and split the line once, instead of many times.
-* look up `with ,` syntax
-
 
 
