@@ -64,6 +64,14 @@ class ValidatingData(unittest.TestCase):
         """is_valid_otherid should only accept OTHER_ID values which are empty"""
         self.assertTrue(is_valid_otherid(self.t_list[1].split('|')[withinlinedict['OTHER_ID']]))
 
+    def test_is_valid_lineotheridnotempty(self):
+        """is_valid_line should not accept OTHER_ID values which are not empty"""
+        self.assertFalse(is_valid_line(self.t_list[0].split('|')))
+
+    def test_is_valid_lineotheridempty(self):
+        """is_valid_line should only accept OTHER_ID values which are empty"""
+        self.assertTrue(is_valid_line(self.t_list[1].split('|')))
+
 
 
     def test_is_valid_zipcodeless(self):
@@ -74,6 +82,14 @@ class ValidatingData(unittest.TestCase):
         """is_valid_zipcode should only accept ZIP_CODE values which are >= 5 digits"""
         self.assertTrue(is_valid_zipcode(self.t_list[3].split('|')[withinlinedict['ZIP_CODE']]))
 
+    def test_is_valid_linezipcodeless(self):
+        """is_valid_line should not accept ZIP_CODE values which are < 5 digits"""
+        self.assertFalse(is_valid_line(self.t_list[2].split('|')))
+
+    def test_is_valid_linezipcodemore(self):
+        """is_valid_line should only accept ZIP_CODE values which are >= 5 digits"""
+        self.assertTrue(is_valid_line(self.t_list[3].split('|')))
+
 
 
     def test_is_name_existempty(self):
@@ -83,6 +99,14 @@ class ValidatingData(unittest.TestCase):
     def test_is_name_existfull(self):
         """emptyname should accept NAME values which are not empty"""
         self.assertTrue(is_name_exist(self.t_list[5].split('|')[withinlinedict['NAME']]))
+
+    def test_is_valid_linename_existempty(self):
+        """is_valid_line should not accept NAME values which are empty"""
+        self.assertFalse(is_valid_line(self.t_list[4].split('|')))
+
+    def test_is_valid_linename_existfull(self):
+        """is_valid_line should accept NAME values which are not empty"""
+        self.assertTrue(is_valid_line(self.t_list[5].split('|')))
 
 
 
@@ -98,6 +122,18 @@ class ValidatingData(unittest.TestCase):
         """is_valid_cmteid should not accept CMTE_ID values > 9 characters"""
         self.assertFalse(is_valid_cmteid(self.t_list[8].split('|')[withinlinedict['CMTE_ID']]))
 
+    def test_is_valid_linecmteid(self):
+        """is_valid_line should only accept CMTE_ID values which are 9 characters"""
+        self.assertTrue(is_valid_line(self.t_list[6].split('|')))
+
+    def test_is_valid_linecmteidless(self):
+        """is_valid_line should not accept CMTE_ID values < 9 characters"""
+        self.assertFalse(is_valid_line(self.t_list[7].split('|')))
+
+    def test_is_valid_linecmteidmore(self):
+        """is_valid_line should not accept CMTE_ID values > 9 characters"""
+        self.assertFalse(is_valid_line(self.t_list[8].split('|')))
+
 
 
     def test_is_valid_transactionamtempty(self):
@@ -111,6 +147,18 @@ class ValidatingData(unittest.TestCase):
     def test_is_valid_transactionamtnum(self):
         """is_valid_transactionamt should not accept TRANSACTION_AMT values which are not numbers"""
         self.assertFalse(is_valid_transaction(self.t_list[11].split('|')[withinlinedict['TRANSACTION_AMT']]))
+
+    def test_is_valid_linetransactionamtempty(self):
+        """is_valid_line should not accept TRANSACTION_AMT values which are empty"""
+        self.assertFalse(is_valid_line(self.t_list[9].split('|')))
+
+    def test_is_valid_linetransactionamtfull(self):
+        """is_valid_line should accept TRANSACTION_AMT values which are not empty and are numbers"""
+        self.assertTrue(is_valid_line(self.t_list[10].split('|')))
+
+    def test_is_valid_linetransactionamtnum(self):
+        """is_valid_line should not accept TRANSACTION_AMT values which are not numbers"""
+        self.assertFalse(is_valid_line(self.t_list[11].split('|')))
 
 
 
@@ -129,6 +177,22 @@ class ValidatingData(unittest.TestCase):
     def test_is_valid_date(self):
         """is_valid_date should only accept TRANSACTION_DT values which represent valid dates"""
         self.assertFalse(is_valid_date(self.t_list[15].split('|')[withinlinedict['TRANSACTION_DT']]))
+
+    def test_is_valid_line_datelength(self):
+        """is_valid_line should only accept TRANSACTION_DT values which are 8 characters"""
+        self.assertTrue(is_valid_line(self.t_list[12].split('|')))
+
+    def test_is_valid_line_datelengthgreater(self):
+        """is_valid_line should not accept TRANSACTION_DT values > 8 characters"""
+        self.assertFalse(is_valid_line(self.t_list[13].split('|')))
+
+    def test_is_valid_line_datelengthless(self):
+        """is_valid_line should not accept TRANSACTION_DT values < 8 characters"""
+        self.assertFalse(is_valid_line(self.t_list[14].split('|')))
+
+    def test_is_valid_is_valid_line_date(self):
+        """is_valid_line should only accept TRANSACTION_DT values which represent valid dates"""
+        self.assertFalse(is_valid_line(self.t_list[15].split('|')))
 
 
 
