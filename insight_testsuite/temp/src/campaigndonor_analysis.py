@@ -54,8 +54,6 @@ def cdanalysis(folder_in = 'input', folder_out = 'output',\
 
 
 
-
-
 def percentile_read(percentile_filename):
     percent = list(open(percentile_filename))[0]
     float(percent)
@@ -65,13 +63,6 @@ def percentile_read(percentile_filename):
 
 
 
-
-
-def is_valid_line(input_line):
-    is_valid = True
-    for key in line_test_dict:
-        is_valid = is_valid and line_test_dict[key](input_line[withinlinedict[key]])
-    return is_valid
 
 
 def is_valid_cmteid(cmtestring):
@@ -123,6 +114,16 @@ line_test_dict = {'CMTE_ID':is_valid_cmteid,
                   'TRANSACTION_AMT':is_valid_transaction,
                   'OTHER_ID':is_valid_otherid}
 
+def is_valid_line(input_line):
+    is_valid = True
+    for key in line_test_dict:
+        is_valid = is_valid and line_test_dict[key](input_line[withinlinedict[key]])
+    return is_valid
+
+
+
+
+
 
 
 
@@ -132,11 +133,15 @@ def repeat_donor(identifierstring, date, donordictionary):
         donorisrepeat = True
     return donorisrepeat
 
-def amount_donated(donationlist):
-    return round(sum(donationlist))
+def new_contribution(identifierstring, value, contribution_dict):
+    if identifierstring in contribution_dict:
+        templist = contribution_dict[identifierstring]
+        bisect.insort(templist, value)
+        contribution_dict[identifierstring] = templist
+    elif identifierstring not in contribution_dict:
+        contribution_dict[identifierstring] = [value]
+    return contribution_dict
 
-def donation_count(donationlist):
-    return len(donationlist)
 
 def percentile(percentile_value, donationlist):
     if percentile_value == 100:
@@ -144,6 +149,12 @@ def percentile(percentile_value, donationlist):
     else:
         returnpercentile = donationlist[round(percentile_value*len(donationlist)//100)]
     return round(returnpercentile)
+
+def amount_donated(donationlist):
+    return round(sum(donationlist))
+
+def donation_count(donationlist):
+    return len(donationlist)
 
 
 
@@ -153,15 +164,6 @@ def add_donor(identifierstring, date, donor_dict):
         donor_dict[identifierstring] = date
     return donor_dict
 
-
-def new_contribution(identifierstring, value, contribution_dict):
-    if identifierstring in contribution_dict:
-        templist = contribution_dict[identifierstring]
-        bisect.insort(templist, value)
-        contribution_dict[identifierstring] = templist
-    elif identifierstring not in contribution_dict:
-        contribution_dict[identifierstring] = [value]
-    return contribution_dict
 
 
 

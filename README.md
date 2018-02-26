@@ -111,3 +111,9 @@ which means my Next steps are:
 
 Also, just discovered that `git add --all` had missed a couple things.
 
+Arranged functions in order of appearance.
+
+Added tests for is_valid_line
+
+
+
